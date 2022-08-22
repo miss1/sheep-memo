@@ -5,16 +5,14 @@ import Home from './views/home'
 function App() {
   return (
     <HashRouter>
-      <div>
-        <Switch>
-          <Route path="/home">
-            <Home />
-          </Route>
-          <Route path="/">
-            <Login />
-          </Route>
-        </Switch>
-    </div>
+      <Switch>
+        <Route path="/home">
+          <Home />
+        </Route>
+        <Route path="/">
+          <Login />
+        </Route>
+      </Switch>
     </HashRouter>
   );
 }
