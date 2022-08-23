@@ -1,0 +1,8 @@
+.header {
+  width: 100%;
+  border-bottom: 1px solid #e7eaf1;
+  display: flex;
+  justify-content: center;
+  padding: 0 20px;
+  user-select: none;
+}

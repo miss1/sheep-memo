@@ -1,10 +1,12 @@
-import React, { Component } from 'react';
-import Button from '@mui/material/Button';
+import Header from '../components/header'
 
-class Home extends Component {
-  render() {
-    return (<Button variant="contained">home</Button>);
-  }
+function Home() {
+  return (
+    <div className="home-page">
+      <Header/>
+      <h1>home</h1>
+    </div>
+  );
 }
 
 export default Home;
