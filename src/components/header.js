@@ -8,6 +8,8 @@ import { useHistory, useLocation } from "react-router-dom";
 import '../assets/header.css'
 import MenuIcon from "@mui/icons-material/Menu";
 import IconButton from "@mui/material/IconButton";
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import {pink} from "@mui/material/colors";
 
 const pages = [
   {value: '/home', label: 'HOME'},
@@ -41,7 +43,7 @@ function Header() {
 
   return (
     <div className="header">
-      <Box sx={{ justifyContent: 'space-between', maxWidth: 1000, width: '100%', display: { xs: 'none', md: 'flex' } }}>
+      <Box sx={{ justifyContent: 'space-between', maxWidth: 900, width: '100%', display: { xs: 'none', md: 'flex' } }}>
         <p className="header-title">Y&C</p>
         <Tabs value={location.pathname} onChange={handleChange} aria-label="nav tabs example">
           {pages.map((page) => (
@@ -49,7 +51,8 @@ function Header() {
           ))}
         </Tabs>
       </Box>
-      <Box sx={{ justifyContent: 'space-between', width: '100%', display: { xs: 'flex', md: 'none' } }}>
+      <Box sx={{ justifyContent: 'space-between', alignItems: 'center', width: '100%', display: { xs: 'flex', md: 'none' } }}>
+        <FavoriteIcon sx={{ color: pink[500], fontSize: 30 }}/>
         <p className="header-title">Y&C</p>
         <IconButton
           size="large"
