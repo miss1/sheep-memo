@@ -15,7 +15,7 @@ const pages = [
   {value: '/home', label: 'HOME'},
   {value: '/special', label: 'SPECIAL DAY'},
   {value: '/story', label: 'STORY'},
-  {value: '/letter', label: 'LOVE LETTER'},
+  {value: '/letter', label: 'LETTER'},
   {value: '/cook', label: 'COOKBOOK'}
 ];
 

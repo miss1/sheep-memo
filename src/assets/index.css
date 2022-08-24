@@ -19,13 +19,18 @@ body{
   height: 100%;
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 
 .content-page {
   width: 100%;
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 5px 10px;
   flex: 1;
   overflow-y: auto;
+}
+
+.page-scroll {
+  width: 100%;
+  margin: 0 auto;
+  max-width: 900px;
+  padding: 5px 15px;
 }

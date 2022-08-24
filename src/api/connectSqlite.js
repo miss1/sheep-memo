@@ -1,6 +1,5 @@
 import initSqlJs from 'sql.js';
-import moment from 'moment'
-import { QUERY_USERS, QUERY_SPECIAL_DAYS } from './sql'
+import { QUERY_USERS } from './sql'
 
 let db = null;
 
@@ -22,8 +21,8 @@ export function checkPassword () {
   return {id: res[0].values[0][0], password: res[0].values[0][1] + ''}
 }
 
-export function queryAllSpecialDay () {
-  let res = db.exec(QUERY_SPECIAL_DAYS);
+export function queryData (sql) {
+  let res = db.exec(sql);
   if (!res || res.length === 0) return [];
   let keys = res[0].columns;
   let data = res[0].values;
@@ -31,14 +30,6 @@ export function queryAllSpecialDay () {
     let d = {};
     for (let i = 0; i < keys.length; i++) {
       d[keys[i]] = val[i];
-    }
-    if (d.type === 1) {
-      d.duration = '';
-      d.days = moment(d.time).diff(moment(), 'days');
-    } else {
-      let { _data } = moment.duration(moment().diff(moment(d.time)));
-      d.duration = _data.years + ' Years ' + _data.months + ' Month ' + _data.days + ' Day';
-      d.days = moment().diff(moment(d.time), 'days');
     }
     return d;
   })
