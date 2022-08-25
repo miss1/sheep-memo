@@ -19,7 +19,7 @@ import TimelineDot from '@mui/lab/TimelineDot';
 function Special() {
   const [list, setList] = useState([]);
   const [timeline, setTimeline] = useState([]);
-  const [showTimeLine, setShowTimeLine] = useState(false);
+  const [showTimeLine, setShowTimeLine] = useState(true);
   useEffect( () => {
     let data = queryData(QUERY_SPECIAL_DAYS);
     data = data.map(val => {
