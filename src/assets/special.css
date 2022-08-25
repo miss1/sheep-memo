@@ -1,3 +1,9 @@
+.special-timeline {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
 .special-page {
   display: flex;
   flex-wrap: wrap;
