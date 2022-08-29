@@ -2,7 +2,7 @@ import { HashRouter, Switch, Route } from "react-router-dom";
 import Login from './views/login';
 import Home from './views/home';
 import Special from './views/special'
-import Story from './views/story'
+import Plan from './views/plan'
 import Letter from './views/letter'
 import Cook from './views/cook'
 
@@ -16,8 +16,8 @@ function App() {
         <Route path="/special">
           <Special />
         </Route>
-        <Route path="/story">
-          <Story />
+        <Route path="/plan">
+          <Plan />
         </Route>
         <Route path="/letter">
           <Letter />

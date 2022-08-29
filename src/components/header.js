@@ -14,7 +14,7 @@ import {pink} from "@mui/material/colors";
 const pages = [
   {value: '/home', label: 'HOME'},
   {value: '/special', label: 'SPECIAL DAY'},
-  {value: '/story', label: 'STORY'},
+  {value: '/plan', label: 'PLAN'},
   {value: '/letter', label: 'LETTER'},
   {value: '/cook', label: 'COOKBOOK'}
 ];
