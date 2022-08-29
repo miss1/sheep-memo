@@ -9,11 +9,15 @@ import CardActionArea from '@mui/material/CardActionArea';
 import AddIcon from "@mui/icons-material/Add";
 import Fab from "@mui/material/Fab";
 import Loading from "../components/loading";
+import AddPlan from "../components/addPlan";
+import { useHistory } from "react-router-dom";
 
 function Plan() {
   const [alignment, setAlignment] = useState('');
   const [list, setList] = useState([]);
   const [openLoading, setOpenLoading] = useState(false);
+  let history = useHistory();
+  let addPlanRef = React.createRef();
 
   useEffect(() => {
     setOpenLoading(true);
@@ -32,7 +36,7 @@ function Plan() {
     if (type) query.equalTo("type", "==", type);
     query.find().then(res => {
       setList(res);
-      setOpenLoading(true);
+      setOpenLoading(false);
     });
   }
 
@@ -42,11 +46,11 @@ function Plan() {
   };
 
   const showPlanDetail = (id) => {
-    console.log(id)
+    history.push({pathname: '/plan-detail/' + id});
   }
 
   const doAddPlan = () => {
-    console.log(123)
+    addPlanRef.current.openDialog();
   }
 
   return (
@@ -80,6 +84,7 @@ function Plan() {
       <Fab onClick={doAddPlan} color='primary' sx={{position: 'absolute', bottom: '5%', right: '10%'}}>
         <AddIcon/>
       </Fab>
+      <AddPlan onRef={addPlanRef} refreshPage={getList}/>
       <Loading open={openLoading}/>
     </div>
   );

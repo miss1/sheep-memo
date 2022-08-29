@@ -6,7 +6,8 @@ import React, { useEffect, useState } from "react";
 import Fab from '@mui/material/Fab';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import Typography from '@mui/material/Typography';
-import moment from "moment";
+import dayjs from 'dayjs';
+import duration from 'dayjs/plugin/duration';
 import Timeline from '@mui/lab/Timeline';
 import TimelineItem from '@mui/lab/TimelineItem';
 import TimelineSeparator from '@mui/lab/TimelineSeparator';
@@ -20,6 +21,9 @@ function Special() {
   const [timeline, setTimeline] = useState([]);
   const [showTimeLine, setShowTimeLine] = useState(true);
   const [openLoading, setOpenLoading] = useState(false);
+
+  dayjs.extend(duration)
+
   useEffect( () => {
     setOpenLoading(true);
     const query = React.$bmob.Query("Special");
@@ -29,11 +33,11 @@ function Special() {
       let data = res.map(val => {
         if (val.type === 1) {
           val.duration = '';
-          val.days = moment(val.time).diff(moment(), 'days');
+          val.days = dayjs(val.time).diff(dayjs(), 'day');
         } else {
-          let { _data } = moment.duration(moment().diff(moment(val.time)));
-          val.duration = _data.years + ' Years ' + _data.months + ' Month ' + _data.days + ' Day';
-          val.days = moment().diff(moment(val.time), 'days');
+          let _data = dayjs.duration(dayjs().diff(dayjs(val.time)));
+          val.duration = _data.years() + ' Years ' + _data.months() + ' Month ' + _data.days() + ' Day';
+          val.days = dayjs().diff(dayjs(val.time), 'day');
         }
         return val;
       });
