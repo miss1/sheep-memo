@@ -9,18 +9,22 @@ import React, { useEffect, useState } from "react";
 import Fab from '@mui/material/Fab';
 import CloseIcon from '@mui/icons-material/Close';
 import AddIcon from '@mui/icons-material/Add';
+import Loading from "../components/loading";
 
 function Letter() {
   const [list, setList] = useState([]);
   const [content, setContent] = useState({});
   const [showContent, setShowContent] = useState(false);
+  const [openLoading, setOpenLoading] = useState(false);
   useEffect( () => {
+    setOpenLoading(true);
     const query = React.$bmob.Query("Letter");
     query.order('-createdAt');
     query.find().then(res => {
       setList(res);
+      setOpenLoading(false);
     });
-  },[setList]);
+  },[setList, setOpenLoading]);
 
   const showLetterContent = (content) => {
     setContent(content);
@@ -77,6 +81,7 @@ function Letter() {
           : <AddIcon/>
         }
       </Fab>
+      <Loading open={openLoading}/>
     </div>
   );
 }

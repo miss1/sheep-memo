@@ -12,24 +12,34 @@ import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import AddCookDialog from '../components/addCook'
+import Loading from "../components/loading";
 
 function Cook() {
   const [list, setList] = useState([]);
   const [detail, setDetail] = useState({});
   const [showDetail, setShowDetail] = useState(false);
+  const [openLoading, setOpenLoading] = useState(false);
   let addDialogRef = React.createRef();
 
   useEffect(() => {
+    setOpenLoading(true);
     const query = React.$bmob.Query("Cookbook");
     query.find().then(res => {
       setList(res);
+      setOpenLoading(false);
+    }).catch(err => {
+      setOpenLoading(false);
     });
-  }, [setList]);
+  }, [setList, setOpenLoading]);
 
   const queryList = () => {
+    setOpenLoading(true);
     const query = React.$bmob.Query("Cookbook");
     query.find().then(res => {
       setList(res);
+      setOpenLoading(false);
+    }).catch(err => {
+      setOpenLoading(false);
     });
   }
 
@@ -104,6 +114,7 @@ function Cook() {
         }
       </Fab>
       <AddCookDialog onRef={addDialogRef} refreshPage={queryList}/>
+      <Loading open={openLoading}/>
     </div>
   );
 }

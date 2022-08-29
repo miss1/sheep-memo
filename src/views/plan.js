@@ -8,28 +8,31 @@ import AlertTitle from '@mui/material/AlertTitle';
 import CardActionArea from '@mui/material/CardActionArea';
 import AddIcon from "@mui/icons-material/Add";
 import Fab from "@mui/material/Fab";
+import Loading from "../components/loading";
 
 function Plan() {
   const [alignment, setAlignment] = useState('');
   const [list, setList] = useState([]);
+  const [openLoading, setOpenLoading] = useState(false);
 
   useEffect(() => {
+    setOpenLoading(true);
     const query = React.$bmob.Query("Plan");
     query.order('-time');
-    if (alignment) query.equalTo("type", "==", alignment);
     query.find().then(res => {
-      console.log(res)
       setList(res);
+      setOpenLoading(false);
     });
-  }, [setList]);
+  }, [setList, setOpenLoading]);
 
   const getList = (type) => {
+    setOpenLoading(true);
     const query = React.$bmob.Query("Plan");
     query.order('-time');
     if (type) query.equalTo("type", "==", type);
     query.find().then(res => {
-      console.log(res)
       setList(res);
+      setOpenLoading(true);
     });
   }
 
@@ -77,6 +80,7 @@ function Plan() {
       <Fab onClick={doAddPlan} color='primary' sx={{position: 'absolute', bottom: '5%', right: '10%'}}>
         <AddIcon/>
       </Fab>
+      <Loading open={openLoading}/>
     </div>
   );
 }

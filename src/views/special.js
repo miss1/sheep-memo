@@ -13,15 +13,19 @@ import TimelineSeparator from '@mui/lab/TimelineSeparator';
 import TimelineConnector from '@mui/lab/TimelineConnector';
 import TimelineContent from '@mui/lab/TimelineContent';
 import TimelineDot from '@mui/lab/TimelineDot';
+import Loading from "../components/loading";
 
 function Special() {
   const [list, setList] = useState([]);
   const [timeline, setTimeline] = useState([]);
   const [showTimeLine, setShowTimeLine] = useState(true);
+  const [openLoading, setOpenLoading] = useState(false);
   useEffect( () => {
+    setOpenLoading(true);
     const query = React.$bmob.Query("Special");
     query.order('time');
     query.find().then(res => {
+      setOpenLoading(false);
       let data = res.map(val => {
         if (val.type === 1) {
           val.duration = '';
@@ -37,7 +41,7 @@ function Special() {
       setList(data);
       setTimeline(timeList);
     });
-  },[setList]);
+  },[setList, setOpenLoading]);
 
   const doAction = () => {
     setShowTimeLine(!showTimeLine);
@@ -83,6 +87,7 @@ function Special() {
            sx={{position: 'absolute', bottom: '5%', right: '10%'}}>
         <SwapHorizIcon/>
       </Fab>
+      <Loading open={openLoading}/>
     </div>
   );
 }
