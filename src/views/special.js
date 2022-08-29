@@ -2,8 +2,6 @@ import Header from "../components/header";
 import '../assets/special.css'
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import { queryData } from '../api/connectSqlite'
-import { QUERY_SPECIAL_DAYS, QUERY_SPECIAL_DAYS_Timeline } from '../api/sql'
 import React, { useEffect, useState } from "react";
 import Fab from '@mui/material/Fab';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
@@ -21,20 +19,24 @@ function Special() {
   const [timeline, setTimeline] = useState([]);
   const [showTimeLine, setShowTimeLine] = useState(true);
   useEffect( () => {
-    let data = queryData(QUERY_SPECIAL_DAYS);
-    data = data.map(val => {
-      if (val.type === 1) {
-        val.duration = '';
-        val.days = moment(val.time).diff(moment(), 'days');
-      } else {
-        let { _data } = moment.duration(moment().diff(moment(val.time)));
-        val.duration = _data.years + ' Years ' + _data.months + ' Month ' + _data.days + ' Day';
-        val.days = moment().diff(moment(val.time), 'days');
-      }
-      return val;
+    const query = React.$bmob.Query("Special");
+    query.order('time');
+    query.find().then(res => {
+      let data = res.map(val => {
+        if (val.type === 1) {
+          val.duration = '';
+          val.days = moment(val.time).diff(moment(), 'days');
+        } else {
+          let { _data } = moment.duration(moment().diff(moment(val.time)));
+          val.duration = _data.years + ' Years ' + _data.months + ' Month ' + _data.days + ' Day';
+          val.days = moment().diff(moment(val.time), 'days');
+        }
+        return val;
+      });
+      let timeList = data.filter(val => val.type === 2);
+      setList(data);
+      setTimeline(timeList);
     });
-    setList(data);
-    setTimeline(queryData(QUERY_SPECIAL_DAYS_Timeline));
   },[setList]);
 
   const doAction = () => {
@@ -49,12 +51,12 @@ function Special() {
           ? <div className="page-scroll special-timeline">
             <Timeline position="alternate">
               {timeline.map((item) => (
-                <TimelineItem key={item.title}>
+                <TimelineItem key={item.objectId}>
                   <TimelineSeparator>
                     <TimelineDot color='success' />
                     <TimelineConnector />
                   </TimelineSeparator>
-                  <TimelineContent>{item.title} ({item.time})</TimelineContent>
+                  <TimelineContent>{item.name} ({item.time})</TimelineContent>
                 </TimelineItem>
               ))}
             </Timeline>
@@ -62,10 +64,10 @@ function Special() {
           </div>
           : <div className="page-scroll special-page">
             {list.map((item) => (
-              <Card key={item.title} sx={{width: {xs: '100%', md: '49%'}, margin: '5px 0'}}>
+              <Card key={item.objectId} sx={{width: {xs: '100%', md: '49%'}, margin: '5px 0'}}>
                 <CardContent sx={{m: 0, p: 0}}>
                   <div className={item.type === 1 ? 'special-head-down' : 'special-head-up'}>
-                    <p>{item.title}</p>
+                    <p>{item.name}</p>
                     <p>{item.type === 1 ? 'Arrives in' : 'Already'}</p>
                   </div>
                   <p className="special-content">{item.days}</p>

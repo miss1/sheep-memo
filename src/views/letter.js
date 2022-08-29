@@ -5,8 +5,6 @@ import CardMedia from '@mui/material/CardMedia';
 import CardActionArea from '@mui/material/CardActionArea';
 import Typography from '@mui/material/Typography';
 import img from '../assets/img/lineart.png'
-import { queryData } from '../api/connectSqlite'
-import { QUERY_LETTERS } from '../api/sql'
 import React, { useEffect, useState } from "react";
 import Fab from '@mui/material/Fab';
 import CloseIcon from '@mui/icons-material/Close';
@@ -17,7 +15,11 @@ function Letter() {
   const [content, setContent] = useState({});
   const [showContent, setShowContent] = useState(false);
   useEffect( () => {
-    setList(queryData(QUERY_LETTERS));
+    const query = React.$bmob.Query("Letter");
+    query.order('-createdAt');
+    query.find().then(res => {
+      setList(res);
+    });
   },[setList]);
 
   const showLetterContent = (content) => {
@@ -52,7 +54,7 @@ function Letter() {
                 <Typography variant="subtitle1" sx={{textAlign: 'right'}}>{content.time}</Typography>
               </div>
             : list.map(item => (
-              <Card key={item.id} sx={{maxWidth: 600, margin: '10px auto'}}>
+              <Card key={item.objectId} sx={{maxWidth: 600, margin: '10px auto'}}>
                 <CardActionArea onClick={() => showLetterContent(item)}>
                   <CardMedia
                     component="img"

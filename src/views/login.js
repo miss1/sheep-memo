@@ -6,21 +6,23 @@ import Message from '../components/message';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import { useHistory } from 'react-router-dom';
 import {pink} from "@mui/material/colors";
-import { checkPassword } from '../api/connectSqlite'
 
 function Login() {
   let history = useHistory();
   const [password, setPassword] = useState('');
-  let messageRef = React.createRef();
+  const [openMsg, setOpenMsg] = useState(false);
 
   const doLogin = () => {
-    const userInfo = checkPassword();
-    if (userInfo.password === password) {
+    React.$bmob.User.login('ccc',password).then(res => {
       history.replace({pathname: '/home'});
       history.go(0);
-    } else {
-      messageRef.current.openMsg('error', 'Wrong Password!');
-    }
+    }).catch(err => {
+      setOpenMsg(true);
+    });
+  }
+
+  const closeMsg = () => {
+    setOpenMsg(false);
   }
 
   return (
@@ -36,7 +38,7 @@ function Login() {
           onChange={(e) => setPassword(e.target.value)}/>
         <Button variant="contained" onClick={doLogin}>Login</Button>
       </div>
-      <Message onRef={messageRef} vertical="top" horizontal="center"/>
+      <Message vertical="top" horizontal="center" open={openMsg} type='error' text='Wrong Password!' close={closeMsg}/>
     </div>
   );
 }

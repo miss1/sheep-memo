@@ -1,4 +1,3 @@
-import React, { useEffect } from "react";
 import { HashRouter, Switch, Route } from "react-router-dom";
 import Login from './views/login';
 import Home from './views/home';
@@ -6,11 +5,8 @@ import Special from './views/special'
 import Story from './views/story'
 import Letter from './views/letter'
 import Cook from './views/cook'
-import { connectDB } from './api/connectSqlite'
 
 function App() {
-  useEffect( () => { connectDB().then(); });
-
   return (
     <HashRouter>
       <Switch>

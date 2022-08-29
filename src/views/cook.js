@@ -5,29 +5,39 @@ import ImageListItemBar from '@mui/material/ImageListItemBar';
 import IconButton from '@mui/material/IconButton';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import defaultImg from '../assets/img/cook-default.jpg'
-import { queryData } from '../api/connectSqlite'
-import {QUERY_COOKBOOK} from '../api/sql'
 import React, { useEffect, useState } from "react";
 import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
+import AddCookDialog from '../components/addCook'
 
 function Cook() {
   const [list, setList] = useState([]);
   const [detail, setDetail] = useState({});
   const [showDetail, setShowDetail] = useState(false);
+  let addDialogRef = React.createRef();
 
-  useEffect( () => {
-    setList(queryData(QUERY_COOKBOOK));
-  },[setList]);
+  useEffect(() => {
+    const query = React.$bmob.Query("Cookbook");
+    query.find().then(res => {
+      setList(res);
+    });
+  }, [setList]);
+
+  const queryList = () => {
+    const query = React.$bmob.Query("Cookbook");
+    query.find().then(res => {
+      setList(res);
+    });
+  }
 
   const doFabAction = () => {
     if (showDetail) {
       setShowDetail(false);
     } else {
-
+      addDialogRef.current.openDialog();
     }
   }
 
@@ -37,7 +47,6 @@ function Cook() {
   }
 
   const addToMenuList = (event) => {
-    console.log(123)
     event.stopPropagation();
   }
 
@@ -63,7 +72,7 @@ function Cook() {
             </div>
             : <ImageList>
               {list.map((item) => (
-                <ImageListItem key={item.id} onClick={() => showContent(item)}>
+                <ImageListItem key={item.objectId} onClick={() => showContent(item)}>
                   <img
                     src={item.img || defaultImg}
                     alt={item.name}
@@ -94,6 +103,7 @@ function Cook() {
           : <AddIcon/>
         }
       </Fab>
+      <AddCookDialog onRef={addDialogRef} refreshPage={queryList}/>
     </div>
   );
 }
