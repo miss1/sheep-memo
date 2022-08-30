@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
@@ -23,6 +23,15 @@ function Header() {
   let history = useHistory();
   let location = useLocation();
   const [anchorElNav, setAnchorElNav] = useState(null);
+  const [tabVal, setTabVal] = useState('/home');
+
+  useEffect(() => {
+    if (location.pathname.indexOf('plan-detail') !== -1) {
+      setTabVal('/plan');
+    } else {
+      setTabVal(location.pathname);
+    }
+  }, [setTabVal, location]);
 
   const handleChange = (event, newValue) => {
     history.push({pathname: newValue});
@@ -45,7 +54,7 @@ function Header() {
     <div className="header">
       <Box sx={{ justifyContent: 'space-between', maxWidth: 900, width: '100%', display: { xs: 'none', md: 'flex' } }}>
         <p className="header-title">Y&C</p>
-        <Tabs value={location.pathname} onChange={handleChange} aria-label="nav tabs example">
+        <Tabs value={tabVal} onChange={handleChange} aria-label="nav tabs example">
           {pages.map((page) => (
             <Tab key={page.value} value={page.value} label={page.label}/>
           ))}
