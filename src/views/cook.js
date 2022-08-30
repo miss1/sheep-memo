@@ -13,6 +13,7 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import AddCookDialog from '../components/addCook'
 import Loading from "../components/loading";
+import AddMenu from "../components/addMenu";
 
 function Cook() {
   const [list, setList] = useState([]);
@@ -20,6 +21,7 @@ function Cook() {
   const [showDetail, setShowDetail] = useState(false);
   const [openLoading, setOpenLoading] = useState(false);
   let addDialogRef = React.createRef();
+  let addMenuRef = React.createRef();
 
   useEffect(() => {
     setOpenLoading(true);
@@ -56,8 +58,9 @@ function Cook() {
     setShowDetail(true);
   }
 
-  const addToMenuList = (event) => {
+  const addToMenuList = (event, id) => {
     event.stopPropagation();
+    addMenuRef.current.openDialog(id);
   }
 
   return (
@@ -78,7 +81,7 @@ function Cook() {
               <p style={{whiteSpace: "pre-line", margin: "5px 0 20px"}}>{detail.ingredients}</p>
               <Typography variant="h6">制作方法</Typography>
               <p style={{whiteSpace: "pre-line", margin: "5px 0 20px"}}>{detail.describe}</p>
-              <Button variant="contained" onClick={(event) => addToMenuList(event)}>下单</Button>
+              <Button variant="contained" onClick={(event) => addToMenuList(event, detail.objectId)}>下单</Button>
             </div>
             : <ImageList>
               {list.map((item) => (
@@ -95,7 +98,7 @@ function Cook() {
                       <IconButton
                         sx={{color: 'rgba(255, 255, 255, 0.54)'}}
                         aria-label={`info about ${item.name}`}
-                        onClick={(event) => addToMenuList(event)}>
+                        onClick={(event) => addToMenuList(event, item.objectId)}>
                         <AddCircleIcon/>
                       </IconButton>
                     }
@@ -114,6 +117,7 @@ function Cook() {
         }
       </Fab>
       <AddCookDialog onRef={addDialogRef} refreshPage={queryList}/>
+      <AddMenu onRef={addMenuRef}/>
       <Loading open={openLoading}/>
     </div>
   );
