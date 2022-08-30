@@ -9,12 +9,16 @@ import InfoIcon from '@mui/icons-material/Info';
 
 export default function DeleteConfirm(props) {
   const [open, setOpen] = React.useState(false);
+  const [msg, setMsg] = React.useState('');
+  const [id, setId] = React.useState('');
 
   useImperativeHandle(props.onRef, () => {
     return { openDialog: handleClickOpen };
   });
 
-  const handleClickOpen = () => {
+  const handleClickOpen = (text, oid) => {
+    if (oid) setId(oid);
+    setMsg(text);
     setOpen(true);
   };
 
@@ -23,7 +27,7 @@ export default function DeleteConfirm(props) {
   };
 
   const handleSubmit = () => {
-    props.doDelete();
+    props.doDelete(id);
     handleClose();
   };
 
@@ -37,7 +41,7 @@ export default function DeleteConfirm(props) {
       <DialogContent>
         <DialogContentText id="alert-dialog-description" sx={{display: 'flex', alignItems: 'center'}}>
           <InfoIcon sx={{color: '#ef5350'}}/>
-          确定删除这条数据吗？
+          {msg}
         </DialogContentText>
       </DialogContent>
       <DialogActions>

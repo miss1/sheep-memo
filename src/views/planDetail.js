@@ -122,7 +122,7 @@ export default function PlanDetail(props) {
   }
 
   const deletePlan = () => {
-    confirmDialogRef.current.openDialog();
+    confirmDialogRef.current.openDialog("确定删除这条数据吗？");
   }
 
   const doDelete = () => {
