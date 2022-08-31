@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/forher/static/css/main.0f5a6a39.chunk.css",
+    "main.js": "/forher/static/js/main.7d5d25d8.chunk.js",
+    "main.js.map": "/forher/static/js/main.7d5d25d8.chunk.js.map",
+    "runtime-main.js": "/forher/static/js/runtime-main.5eabd8eb.js",
+    "runtime-main.js.map": "/forher/static/js/runtime-main.5eabd8eb.js.map",
+    "static/js/2.531beadd.chunk.js": "/forher/static/js/2.531beadd.chunk.js",
+    "static/js/2.531beadd.chunk.js.map": "/forher/static/js/2.531beadd.chunk.js.map",
+    "index.html": "/forher/index.html",
+    "static/css/main.0f5a6a39.chunk.css.map": "/forher/static/css/main.0f5a6a39.chunk.css.map",
+    "static/js/2.531beadd.chunk.js.LICENSE.txt": "/forher/static/js/2.531beadd.chunk.js.LICENSE.txt",
+    "static/media/index.css": "/forher/static/media/bak.6586dec7.svg",
+    "static/media/cook-default.215755eb.jpg": "/forher/static/media/cook-default.215755eb.jpg",
+    "static/media/lineart.c315d534.png": "/forher/static/media/lineart.c315d534.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.5eabd8eb.js",
+    "static/js/2.531beadd.chunk.js",
+    "static/css/main.0f5a6a39.chunk.css",
+    "static/js/main.7d5d25d8.chunk.js"
+  ]
+}
