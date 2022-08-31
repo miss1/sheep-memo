@@ -5,17 +5,13 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import React, {useState, useImperativeHandle } from "react";
-import Message from '../components/message';
-import Loading from "./loading";
+import React, {useState, useImperativeHandle, useContext } from "react";
+import {GlobalContext} from "./globalProvider";
 
 export default function AddCookDialog(props) {
   const [open, setOpen] = useState(false);
-  const [openMsg, setOpenMsg] = useState(false);
-  const [msg, setMsg] = useState('message');
-  const [msgType, setMsgType] = useState('success');
   const [cookName, setCookName] = useState('');
-  const [openLoading, setOpenLoading] = useState(false);
+  const global = useContext(GlobalContext);
 
   useImperativeHandle(props.onRef, () => {
     return { openDialog: handleClickOpen };
@@ -29,31 +25,21 @@ export default function AddCookDialog(props) {
     setOpen(false);
   };
 
-  const closeMsg = () => {
-    setOpenMsg(false);
-  }
-
   const handleSubmit = () => {
     handleClose();
-    setOpenLoading(true);
+    global.showLoading();
     const query = React.$bmob.Query("Cookbook");
     query.set('name',cookName);
     query.set('frequency',0);
     query.save().then(res => {
-      toggleMsgBox(true, 'success', 'Add Success');
+      global.showMessage("success", "Add Success");
       props.refreshPage();
-      setOpenLoading(false);
+      global.hideLoading();
     }).catch(err => {
-      toggleMsgBox(true, 'error', 'update error');
-      setOpenLoading(false);
+      global.showMessage("error", err.error)
+      global.hideLoading();
     })
   };
-
-  const toggleMsgBox = function (open, type, text) {
-    setMsg(text);
-    setMsgType(type);
-    setOpenMsg(open);
-  }
 
   return (
     <div>
@@ -79,8 +65,6 @@ export default function AddCookDialog(props) {
           <Button onClick={handleSubmit}>提交</Button>
         </DialogActions>
       </Dialog>
-      <Message vertical="top" horizontal="center" open={openMsg} type={msgType} text={msg} close={closeMsg}/>
-      <Loading open={openLoading}/>
     </div>
   );
 }

@@ -6,26 +6,21 @@ import Stack from '@mui/material/Stack';
 import CardActionArea from '@mui/material/CardActionArea';
 import Chip from '@mui/material/Chip';
 import CloseIcon from '@mui/icons-material/Close';
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useContext} from "react";
 import { useHistory } from "react-router-dom";
 import DeleteConfirm from "../components/deleteConfirm"
-import Loading from "../components/loading";
-import Message from "../components/message";
+import {GlobalContext} from "../components/globalProvider"
 import dayjs from "dayjs";
 
 function Home() {
-  const [openLoading, setOpenLoading] = useState(false);
   const [plan, setPlan] = useState({});
   const [breakfast, setBreakfast] = useState([]);
   const [lunch, setLunch] = useState([]);
   const [dinner, setDinner] = useState([]);
   const [special, setSpecial] = useState([]);
-  const [msg, setMsg] = useState('message');
-  const [msgType, setMsgType] = useState('success');
-  const [openMsg, setOpenMsg] = useState(false);
+  const global = useContext(GlobalContext);
   let history = useHistory();
   let confirmDialogRef = React.createRef();
-  let timer = null;
 
   useEffect(() => {
     const planQuery = React.$bmob.Query("Plan");
@@ -53,6 +48,7 @@ function Home() {
       setDinner(res.filter((val) => val.type === '2'));
     })
 
+    let timer = null;
     const specialQuery = React.$bmob.Query("Special");
     specialQuery.order('time');
     specialQuery.equalTo("type", "==", 2);
@@ -78,12 +74,12 @@ function Home() {
     menuQuery.equalTo("time", "==", dayjs().format('YYYY-MM-DD'));
     menuQuery.include('menu','post')
     menuQuery.find().then(res => {
-      setOpenLoading(false);
+      global.hideLoading();
       setBreakfast(res.filter((val) => val.type === '0'));
       setLunch(res.filter((val) => val.type === '1'));
       setDinner(res.filter((val) => val.type === '2'));
     }).then(err => {
-      setOpenLoading(false);
+      global.hideLoading();
     });
   };
 
@@ -98,26 +94,16 @@ function Home() {
   };
 
   const doDeleteFood = (id) => {
-    setOpenLoading(true);
+    global.showLoading();
     const query = React.$bmob.Query("DailyMenu");
     query.destroy(id).then(res => {
-      toggleMsgBox(true, 'success', 'Delete Success');
+      global.showMessage("success", "Delete Success")
       queryMenu();
     }).catch(err => {
-      setOpenLoading(false);
-      toggleMsgBox(true, 'error', 'error');
+      global.hideLoading();
+      global.showMessage("error", err.error)
     })
   };
-
-  const toggleMsgBox = function (open, type, text) {
-    setMsg(text);
-    setMsgType(type);
-    setOpenMsg(open);
-  }
-
-  const closeMsg = () => {
-    setOpenMsg(false);
-  }
 
   return (
     <div className="page">
@@ -189,8 +175,6 @@ function Home() {
           sx={{margin: "5px", backgroundColor: "rgb(237, 247, 237)"}}/>
       </div>
       <DeleteConfirm onRef={confirmDialogRef} doDelete={doDeleteFood}/>
-      <Message vertical="top" horizontal="center" open={openMsg} type={msgType} text={msg} close={closeMsg}/>
-      <Loading open={openLoading}/>
     </div>
   );
 }

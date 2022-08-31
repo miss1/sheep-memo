@@ -1,6 +1,6 @@
 import Header from "../components/header";
 import '../assets/plan.css'
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import Alert from '@mui/material/Alert';
@@ -8,35 +8,25 @@ import AlertTitle from '@mui/material/AlertTitle';
 import CardActionArea from '@mui/material/CardActionArea';
 import AddIcon from "@mui/icons-material/Add";
 import Fab from "@mui/material/Fab";
-import Loading from "../components/loading";
 import AddPlan from "../components/addPlan";
 import { useHistory } from "react-router-dom";
+import {GlobalContext} from "../components/globalProvider"
 
 function Plan() {
   const [alignment, setAlignment] = useState('');
   const [list, setList] = useState([]);
-  const [openLoading, setOpenLoading] = useState(false);
   let history = useHistory();
   let addPlanRef = React.createRef();
-
-  useEffect(() => {
-    setOpenLoading(true);
-    const query = React.$bmob.Query("Plan");
-    query.order('-time');
-    query.find().then(res => {
-      setList(res);
-      setOpenLoading(false);
-    });
-  }, [setList, setOpenLoading]);
+  const global = useContext(GlobalContext);
 
   const getList = (type) => {
-    setOpenLoading(true);
+    global.showLoading();
     const query = React.$bmob.Query("Plan");
     query.order('-time');
     if (type) query.equalTo("type", "==", type);
     query.find().then(res => {
       setList(res);
-      setOpenLoading(false);
+      global.hideLoading();
     });
   }
 
@@ -52,6 +42,8 @@ function Plan() {
   const doAddPlan = () => {
     addPlanRef.current.openDialog();
   }
+
+  useEffect(getList, []);
 
   return (
     <div className="page">
@@ -87,7 +79,6 @@ function Plan() {
         <AddIcon/>
       </Fab>
       <AddPlan onRef={addPlanRef} refreshPage={getList}/>
-      <Loading open={openLoading}/>
     </div>
   );
 }

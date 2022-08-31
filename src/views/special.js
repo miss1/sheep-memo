@@ -2,7 +2,7 @@ import Header from "../components/header";
 import '../assets/special.css'
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import Fab from '@mui/material/Fab';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import Typography from '@mui/material/Typography';
@@ -14,22 +14,22 @@ import TimelineSeparator from '@mui/lab/TimelineSeparator';
 import TimelineConnector from '@mui/lab/TimelineConnector';
 import TimelineContent from '@mui/lab/TimelineContent';
 import TimelineDot from '@mui/lab/TimelineDot';
-import Loading from "../components/loading";
+import {GlobalContext} from "../components/globalProvider";
 
 function Special() {
   const [list, setList] = useState([]);
   const [timeline, setTimeline] = useState([]);
   const [showTimeLine, setShowTimeLine] = useState(true);
-  const [openLoading, setOpenLoading] = useState(false);
+  const global = useContext(GlobalContext);
 
   dayjs.extend(duration)
 
-  useEffect( () => {
-    setOpenLoading(true);
+  const getLists = () => {
+    global.showLoading();
     const query = React.$bmob.Query("Special");
     query.order('time');
     query.find().then(res => {
-      setOpenLoading(false);
+      global.hideLoading();
       let data = res.map(val => {
         if (val.type === 1) {
           val.duration = '';
@@ -45,11 +45,13 @@ function Special() {
       setList(data);
       setTimeline(timeList);
     });
-  },[setList, setOpenLoading]);
+  }
 
   const doAction = () => {
     setShowTimeLine(!showTimeLine);
   }
+
+  useEffect(getLists, []);
 
   return (
     <div className="page">
@@ -96,7 +98,6 @@ function Special() {
            sx={{position: 'absolute', bottom: '5%', right: '10%'}}>
         <SwapHorizIcon/>
       </Fab>
-      <Loading open={openLoading}/>
     </div>
   );
 }

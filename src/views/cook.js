@@ -5,43 +5,32 @@ import ImageListItemBar from '@mui/material/ImageListItemBar';
 import IconButton from '@mui/material/IconButton';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import defaultImg from '../assets/img/cook-default.jpg'
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import AddCookDialog from '../components/addCook'
-import Loading from "../components/loading";
 import AddMenu from "../components/addMenu";
+import {GlobalContext} from "../components/globalProvider"
 
 function Cook() {
   const [list, setList] = useState([]);
   const [detail, setDetail] = useState({});
   const [showDetail, setShowDetail] = useState(false);
-  const [openLoading, setOpenLoading] = useState(false);
+  const global = useContext(GlobalContext);
   let addDialogRef = React.createRef();
   let addMenuRef = React.createRef();
 
-  useEffect(() => {
-    setOpenLoading(true);
-    const query = React.$bmob.Query("Cookbook");
-    query.find().then(res => {
-      setList(res);
-      setOpenLoading(false);
-    }).catch(err => {
-      setOpenLoading(false);
-    });
-  }, [setList, setOpenLoading]);
-
   const queryList = () => {
-    setOpenLoading(true);
+    global.showLoading();
     const query = React.$bmob.Query("Cookbook");
     query.find().then(res => {
       setList(res);
-      setOpenLoading(false);
+      global.hideLoading();
     }).catch(err => {
-      setOpenLoading(false);
+      global.hideLoading();
     });
   }
 
@@ -62,6 +51,8 @@ function Cook() {
     event.stopPropagation();
     addMenuRef.current.openDialog({id: id, name: name});
   }
+
+  useEffect(queryList, []);
 
   return (
     <div className="page">
@@ -118,7 +109,6 @@ function Cook() {
       </Fab>
       <AddCookDialog onRef={addDialogRef} refreshPage={queryList}/>
       <AddMenu onRef={addMenuRef}/>
-      <Loading open={openLoading}/>
     </div>
   );
 }

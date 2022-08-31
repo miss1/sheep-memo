@@ -5,25 +5,26 @@ import CardMedia from '@mui/material/CardMedia';
 import CardActionArea from '@mui/material/CardActionArea';
 import Typography from '@mui/material/Typography';
 import img from '../assets/img/lineart.png'
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import Fab from '@mui/material/Fab';
 import CloseIcon from '@mui/icons-material/Close';
-import Loading from "../components/loading";
+import {GlobalContext} from "../components/globalProvider"
 
 function Letter() {
   const [list, setList] = useState([]);
   const [content, setContent] = useState({});
   const [showContent, setShowContent] = useState(false);
-  const [openLoading, setOpenLoading] = useState(false);
-  useEffect( () => {
-    setOpenLoading(true);
+  const global = useContext(GlobalContext);
+
+  const queryLetter = () => {
+    global.showLoading();
     const query = React.$bmob.Query("Letter");
     query.order('-createdAt');
     query.find().then(res => {
       setList(res);
-      setOpenLoading(false);
+      global.hideLoading();
     });
-  },[setList, setOpenLoading]);
+  }
 
   const showLetterContent = (content) => {
     setContent(content);
@@ -48,6 +49,8 @@ function Letter() {
 
     }
   }
+
+  useEffect( queryLetter, []);
 
   return (
     <div className="page">
@@ -88,7 +91,6 @@ function Letter() {
         </div>
       </div>
       <ActionFeb/>
-      <Loading open={openLoading}/>
     </div>
   );
 }

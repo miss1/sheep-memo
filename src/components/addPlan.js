@@ -3,9 +3,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
-import Message from "./message";
-import Loading from "./loading";
-import React, {useState, useImperativeHandle } from "react";
+import React, {useState, useImperativeHandle, useContext } from "react";
 import TextField from "@mui/material/TextField";
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
@@ -17,17 +15,15 @@ import dayjs from 'dayjs';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import Stack from '@mui/material/Stack';
+import {GlobalContext} from "./globalProvider";
 
 export default function AddPlan(props) {
   const [open, setOpen] = useState(false);
-  const [openMsg, setOpenMsg] = useState(false);
-  const [openLoading, setOpenLoading] = useState(false);
-  const [msg, setMsg] = useState('message');
-  const [msgType, setMsgType] = useState('success');
   const [planName, setPlanName] = useState('');
   const [planDes, setPlanDes] = useState('');
   const [type, setType] = useState('info');
   const [time, setTime] = useState(dayjs());
+  const global = useContext(GlobalContext);
 
   useImperativeHandle(props.onRef, () => {
     return { openDialog: handleClickOpen };
@@ -41,10 +37,6 @@ export default function AddPlan(props) {
     setOpen(false);
   };
 
-  const closeMsg = () => {
-    setOpenMsg(false);
-  }
-
   const handleTypeChange = (event) => {
     setType(event.target.value);
   }
@@ -56,26 +48,20 @@ export default function AddPlan(props) {
   const handleSubmit = () => {
     if (planName === '') return;
     handleClose();
-    setOpenLoading(true);
+    global.showLoading();
     const query = React.$bmob.Query("Plan");
     query.set('title', planName);
     query.set('describe', planDes);
     query.set('type', type);
     query.set('time', dayjs(time).format('YYYY-MM-DD'));
     query.save().then(res => {
-      toggleMsgBox(true, 'success', 'Add Success');
+      global.showMessage("success", "Add Success");
       props.refreshPage();
-      setOpenLoading(false);
+      global.hideLoading();
     }).catch(err => {
-      toggleMsgBox(true, 'error', 'error');
-      setOpenLoading(false);
+      global.showMessage("error", err.error);
+      global.hideLoading();
     })
-  }
-
-  const toggleMsgBox = function (open, type, text) {
-    setMsg(text);
-    setMsgType(type);
-    setOpenMsg(open);
   }
 
   return (
@@ -128,8 +114,6 @@ export default function AddPlan(props) {
           <Button onClick={handleSubmit}>添加</Button>
         </DialogActions>
       </Dialog>
-      <Message vertical="top" horizontal="center" open={openMsg} type={msgType} text={msg} close={closeMsg}/>
-      <Loading open={openLoading}/>
     </div>
   );
 }

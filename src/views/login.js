@@ -1,33 +1,26 @@
 import '../assets/login.css'
-import React, { useState } from 'react';
+import React, {useContext, useState} from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import Message from '../components/message';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import { useHistory } from 'react-router-dom';
 import {pink} from "@mui/material/colors";
-import Loading from "../components/loading";
+import {GlobalContext} from "../components/globalProvider"
 
 function Login() {
   let history = useHistory();
   const [password, setPassword] = useState('');
-  const [openMsg, setOpenMsg] = useState(false);
-  const [openLoading, setOpenLoading] = useState(false);
+  const global = useContext(GlobalContext);
 
   const doLogin = () => {
-    setOpenLoading(true);
+    global.showLoading();
     React.$bmob.User.login('ccc',password).then(res => {
-      setOpenLoading(false);
+      global.hideLoading();
       history.replace({pathname: '/home'});
-      history.go(0);
     }).catch(err => {
-      setOpenLoading(false);
-      setOpenMsg(true);
+      global.hideLoading();
+      global.showMessage("error", err.error);
     });
-  }
-
-  const closeMsg = () => {
-    setOpenMsg(false);
   }
 
   return (
@@ -47,8 +40,6 @@ function Login() {
           onChange={(e) => setPassword(e.target.value)}/>
         <Button variant="contained" onClick={doLogin}>Login</Button>
       </div>
-      <Message vertical="top" horizontal="center" open={openMsg} type='error' text='Wrong Password!' close={closeMsg}/>
-      <Loading open={openLoading}/>
     </div>
   );
 }

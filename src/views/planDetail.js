@@ -1,6 +1,5 @@
 import Header from "../components/header";
-import React, { useState, useEffect } from 'react';
-import Loading from "../components/loading";
+import React, { useState, useEffect, useContext } from 'react';
 import Fab from "@mui/material/Fab";
 import Typography from '@mui/material/Typography';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -19,48 +18,32 @@ import {MobileDatePicker} from "@mui/x-date-pickers/MobileDatePicker";
 import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
 import dayjs from "dayjs";
 import Button from "@mui/material/Button";
-import Message from "../components/message";
 import DeleteConfirm from "../components/deleteConfirm"
 import { useHistory } from 'react-router-dom';
+import {GlobalContext} from "../components/globalProvider"
 
 export default function PlanDetail(props) {
   const [detail, setDetail] = useState({});
-  const [openLoading, setOpenLoading] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
   const [planName, setPlanName] = useState('');
   const [planDes, setPlanDes] = useState('');
   const [type, setType] = useState('info');
   const [time, setTime] = useState(dayjs());
   const [planDetail, setPlanDetail] = useState(dayjs());
-  const [msg, setMsg] = useState('message');
-  const [msgType, setMsgType] = useState('success');
-  const [openMsg, setOpenMsg] = useState(false);
   let confirmDialogRef = React.createRef();
   let history = useHistory();
-
-  useEffect(() => {
-    setOpenLoading(true);
-    const query = React.$bmob.Query("Plan");
-    query.get(props.match.params.id).then(res => {
-      setDetail(res);
-      setInfo(res);
-      setOpenLoading(false);
-    }).catch(err => {
-      setOpenLoading(false);
-      // toggleMsgBox(true, 'error', err);
-    });
-  }, [setDetail, setOpenLoading, props]);
+  const global = useContext(GlobalContext);
 
   const getInfo = () => {
-    setOpenLoading(true);
+    global.showLoading();
     const query = React.$bmob.Query("Plan");
     query.get(props.match.params.id).then(res => {
       setDetail(res);
       setInfo(res);
-      setOpenLoading(false);
+      global.hideLoading();
     }).catch(err => {
-      setOpenLoading(false);
-      toggleMsgBox(true, 'error', err);
+      global.hideLoading();
+      global.showMessage("error", err.error);
     });
   }
 
@@ -87,7 +70,7 @@ export default function PlanDetail(props) {
 
   const saveDetail = () => {
     if (planName === '') return;
-    setOpenLoading(true);
+    global.showLoading();
     const query = React.$bmob.Query("Plan");
     query.set('id', detail.objectId);
     query.set('title', planName);
@@ -96,24 +79,14 @@ export default function PlanDetail(props) {
     query.set('time', dayjs(time).format('YYYY-MM-DD'));
     query.set('detail', planDetail);
     query.save().then(res => {
-      toggleMsgBox(true, 'success', 'Add Success');
+      global.showMessage("success", "Add Success");
       setShowEdit(false);
-      setOpenLoading(false);
+      global.hideLoading();
       getInfo();
     }).catch(err => {
-      toggleMsgBox(true, 'error', 'error');
-      setOpenLoading(false);
+      global.showMessage("error", err.error);
+      global.hideLoading();
     })
-  }
-
-  const toggleMsgBox = function (open, type, text) {
-    setMsg(text);
-    setMsgType(type);
-    setOpenMsg(open);
-  }
-
-  const closeMsg = () => {
-    setOpenMsg(false);
   }
 
   const doFabAction = () => {
@@ -126,18 +99,20 @@ export default function PlanDetail(props) {
   }
 
   const doDelete = () => {
-    setOpenLoading(true);
+    global.showLoading();
     const query = React.$bmob.Query("Plan");
     query.destroy(detail.objectId).then(res => {
-      toggleMsgBox(true, 'success', 'Delete Success');
+      global.showMessage("success", "Delete Success");
       setShowEdit(false);
-      setOpenLoading(false);
+      global.hideLoading();
       history.go(-1);
     }).catch(err => {
-      setOpenLoading(false);
-      toggleMsgBox(true, 'error', 'error');
+      global.hideLoading();
+      global.showMessage("error", err.error);
     })
   }
+
+  useEffect(getInfo, []);
 
   return (
     <div className="page">
@@ -223,8 +198,6 @@ export default function PlanDetail(props) {
           : <EditIcon/>
         }
       </Fab>
-      <Loading open={openLoading}/>
-      <Message vertical="top" horizontal="center" open={openMsg} type={msgType} text={msg} close={closeMsg}/>
       <DeleteConfirm onRef={confirmDialogRef} doDelete={doDelete}/>
     </div>
   );

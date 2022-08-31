@@ -13,22 +13,18 @@ import Stack from "@mui/material/Stack";
 import {MobileDatePicker} from "@mui/x-date-pickers/MobileDatePicker";
 import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
-import Message from "./message";
-import Loading from "./loading";
-import React, {useState, useImperativeHandle } from "react";
+import React, {useState, useImperativeHandle, useContext } from "react";
 import Typography from "@mui/material/Typography";
+import {GlobalContext} from "./globalProvider"
 import dayjs from "dayjs";
 
 export default function AddMenu(props) {
   const [open, setOpen] = useState(false);
-  const [openMsg, setOpenMsg] = useState(false);
-  const [openLoading, setOpenLoading] = useState(false);
-  const [msg, setMsg] = useState('message');
-  const [msgType, setMsgType] = useState('success');
   const [type, setType] = useState('0');
   const [time, setTime] = useState(dayjs());
   const [objectId, setObjectId] = useState('');
   const [name, setName] = useState('');
+  const global = useContext(GlobalContext);
 
   useImperativeHandle(props.onRef, () => {
     return { openDialog: handleClickOpen };
@@ -36,10 +32,6 @@ export default function AddMenu(props) {
 
   const handleClose = () => {
     setOpen(false);
-  };
-
-  const closeMsg = () => {
-    setOpenMsg(false);
   };
 
   const handleClickOpen = (obj) => {
@@ -60,7 +52,7 @@ export default function AddMenu(props) {
 
   const handleSubmit = () => {
     handleClose();
-    setOpenLoading(true);
+    global.showLoading();
     const pointer = React.$bmob.Pointer('Cookbook');
     const poiID = pointer.set(objectId);
     const query = React.$bmob.Query('DailyMenu');
@@ -68,18 +60,12 @@ export default function AddMenu(props) {
     query.set('type', type);
     query.set('menu', poiID);
     query.save().then(res => {
-      toggleMsgBox(true, 'success', 'Add Success');
-      setOpenLoading(false);
+      global.showMessage("success", "Add Success");
+      global.hideLoading();
     }).catch(err => {
-      toggleMsgBox(true, 'error', 'error');
-      setOpenLoading(false);
+      global.showMessage("error", err.error);
+      global.hideLoading();
     })
-  }
-
-  const toggleMsgBox = function (open, type, text) {
-    setMsg(text);
-    setMsgType(type);
-    setOpenMsg(open);
   }
 
   return (
@@ -118,8 +104,6 @@ export default function AddMenu(props) {
           <Button onClick={handleSubmit}>添加</Button>
         </DialogActions>
       </Dialog>
-      <Message vertical="top" horizontal="center" open={openMsg} type={msgType} text={msg} close={closeMsg}/>
-      <Loading open={openLoading}/>
     </div>
   );
 }
