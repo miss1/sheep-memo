@@ -25,11 +25,9 @@ function Special() {
   dayjs.extend(duration)
 
   const getLists = () => {
-    global.showLoading();
     const query = React.$bmob.Query("Special");
     query.order('time');
-    query.find().then(res => {
-      global.hideLoading();
+    global.doRequest(query, 'get').then(res => {
       let data = res.map(val => {
         if (val.type === 1) {
           val.duration = '';

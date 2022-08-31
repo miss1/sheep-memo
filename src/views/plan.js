@@ -20,13 +20,11 @@ function Plan() {
   const global = useContext(GlobalContext);
 
   const getList = (type) => {
-    global.showLoading();
     const query = React.$bmob.Query("Plan");
     query.order('-time');
     if (type) query.equalTo("type", "==", type);
-    query.find().then(res => {
+    global.doRequest(query, 'get').then(res => {
       setList(res);
-      global.hideLoading();
     });
   }
 

@@ -24,13 +24,9 @@ function Cook() {
   let addMenuRef = React.createRef();
 
   const queryList = () => {
-    global.showLoading();
     const query = React.$bmob.Query("Cookbook");
-    query.find().then(res => {
+    global.doRequest(query, 'get').then(res => {
       setList(res);
-      global.hideLoading();
-    }).catch(err => {
-      global.hideLoading();
     });
   }
 

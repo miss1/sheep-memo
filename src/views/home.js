@@ -22,65 +22,34 @@ function Home() {
   let history = useHistory();
   let confirmDialogRef = React.createRef();
 
-  useEffect(() => {
-    const planQuery = React.$bmob.Query("Plan");
-    planQuery.equalTo("type", "==", "error");
-    planQuery.order('-time');
-    planQuery.limit(1);
-    planQuery.find().then(res => {
-      if (res.length > 0) {
-        setPlan(res[0]);
-      } else {
-        setPlan({
-          objectId: '',
-          title: '-',
-          time: '-'
-        });
-      }
-    });
-
-    const menuQuery = React.$bmob.Query("DailyMenu");
-    menuQuery.equalTo("time", "==", dayjs().format('YYYY-MM-DD'));
-    menuQuery.include('menu','post')
-    menuQuery.find().then(res => {
-      setBreakfast(res.filter((val) => val.type === '0'));
-      setLunch(res.filter((val) => val.type === '1'));
-      setDinner(res.filter((val) => val.type === '2'));
-    })
-
-    let timer = null;
-    const specialQuery = React.$bmob.Query("Special");
-    specialQuery.order('time');
-    specialQuery.equalTo("type", "==", 2);
-    specialQuery.find().then(res => {
-      if (res && res.length > 0) {
-        setSpecial(res[0]);
-        timer = setInterval(() => {
-          setSpecial(res[Math.floor(Math.random() * res.length)]);
-        }, 3000);
-      }
-    })
-
-    return () => {
-      if (timer) {
-        clearInterval(timer);
-        timer = null;
-      }
-    }
-  }, [setPlan, setBreakfast, setLunch, setDinner]);
-
   const queryMenu = () => {
     const menuQuery = React.$bmob.Query("DailyMenu");
     menuQuery.equalTo("time", "==", dayjs().format('YYYY-MM-DD'));
     menuQuery.include('menu','post')
-    menuQuery.find().then(res => {
-      global.hideLoading();
+    global.doRequest(menuQuery, 'get').then(res => {
       setBreakfast(res.filter((val) => val.type === '0'));
       setLunch(res.filter((val) => val.type === '1'));
       setDinner(res.filter((val) => val.type === '2'));
-    }).then(err => {
-      global.hideLoading();
     });
+  };
+
+  const queryPlan = () => {
+    const planQuery = React.$bmob.Query("Plan");
+    planQuery.equalTo("type", "==", "error");
+    planQuery.order('-time');
+    planQuery.limit(1);
+    global.doRequest(planQuery, 'get').then(res => {
+      if (res.length > 0) {
+        setPlan(res[0]);
+      } else {
+        setPlan({ objectId: '', title: '-', time: '-'});
+      }
+    });
+  };
+
+  const queryHomeData = () => {
+    queryPlan();
+    queryMenu();
   };
 
   const handleToPlanDetail = (id) => {
@@ -96,14 +65,33 @@ function Home() {
   const doDeleteFood = (id) => {
     global.showLoading();
     const query = React.$bmob.Query("DailyMenu");
-    query.destroy(id).then(res => {
+    global.doRequest(query, 'delete', id).then(res => {
       global.showMessage("success", "Delete Success")
       queryMenu();
-    }).catch(err => {
-      global.hideLoading();
-      global.showMessage("error", err.error)
-    })
+    });
   };
+
+  useEffect(() => {
+    let timer = null;
+    queryHomeData();
+    const specialQuery = React.$bmob.Query("Special");
+    specialQuery.order('time');
+    specialQuery.equalTo("type", "==", 2);
+    global.doRequest(specialQuery, 'get').then(res => {
+      if (res && res.length > 0) {
+        setSpecial(res[0]);
+        timer = setInterval(() => {
+          setSpecial(res[Math.floor(Math.random() * res.length)]);
+        }, 3000);
+      }
+    });
+    return () => {
+      if (timer) {
+        clearInterval(timer);
+        timer = null;
+      }
+    }
+  } , []);
 
   return (
     <div className="page">

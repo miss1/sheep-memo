@@ -8,7 +8,8 @@ export const GlobalContext = createContext({
   showMessage: (type, message) => {},
   hideMessage: () => {},
   showLoading: () => {},
-  hideLoading: () => {}
+  hideLoading: () => {},
+  doRequest: () => {}
 });
 
 function GlobalProvider({children}) {
@@ -16,6 +17,65 @@ function GlobalProvider({children}) {
   const [openLoading, setOpenLoading] = useState(false);
   const typeRef = useRef();
   const messageRef = useRef();
+
+  const doFind = (query) => {
+    return new Promise((resolve, reject) => {
+      query.find().then(res => {
+        setOpenLoading(false);
+        resolve(res);
+      }).catch(err => {
+        doQueryError(err);
+        reject();
+      })
+    })
+  };
+
+  const doGet = (query, id) => {
+    return new Promise((resolve, reject) => {
+      query.get(id).then(res => {
+        setOpenLoading(false);
+        resolve(res);
+      }).catch(err => {
+        doQueryError(err);
+        reject();
+      })
+    })
+  };
+
+  const doSave = (query) => {
+    return new Promise((resolve, reject) => {
+      query.save().then(res => {
+        setOpenLoading(false);
+        resolve(res);
+      }).catch(err => {
+        doQueryError(err);
+        reject();
+      })
+    })
+  };
+
+  const doDelete = (query, id) => {
+    return new Promise((resolve, reject) => {
+      query.destroy(id).then(res => {
+        setOpenLoading(false);
+        resolve(res);
+      }).catch(err => {
+        doQueryError(err);
+        reject();
+      })
+    })
+  };
+
+  const doQueryError = (err) => {
+    setOpenLoading(false);
+    typeRef.current = "error";
+    messageRef.current = err.error;
+    setOpenMsg(true);
+    if (err.code === 122) {
+      window.location.replace('/');
+    }
+  };
+
   return (
     <GlobalContext.Provider
       value={{
@@ -28,10 +88,17 @@ function GlobalProvider({children}) {
           setOpenMsg(false);
         },
         showLoading: () => {
-          setOpenLoading(true)
+          setOpenLoading(true);
         },
         hideLoading: () => {
-          setOpenLoading(false)
+          setOpenLoading(false);
+        },
+        doRequest: (query, type, id) => {
+          setOpenLoading(true);
+          if (type === 'get') return doFind(query);
+          if (type === 'find') return doGet(query, id);
+          if (type === 'put') return doSave(query);
+          if (type === 'delete') return doDelete(query, id);
         }
       }}>
       {children}

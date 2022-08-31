@@ -27,18 +27,13 @@ export default function AddCookDialog(props) {
 
   const handleSubmit = () => {
     handleClose();
-    global.showLoading();
     const query = React.$bmob.Query("Cookbook");
     query.set('name',cookName);
     query.set('frequency',0);
-    query.save().then(res => {
+    global.doRequest(query, 'put').then(res => {
       global.showMessage("success", "Add Success");
       props.refreshPage();
-      global.hideLoading();
-    }).catch(err => {
-      global.showMessage("error", err.error)
-      global.hideLoading();
-    })
+    });
   };
 
   return (

@@ -52,20 +52,15 @@ export default function AddMenu(props) {
 
   const handleSubmit = () => {
     handleClose();
-    global.showLoading();
     const pointer = React.$bmob.Pointer('Cookbook');
     const poiID = pointer.set(objectId);
     const query = React.$bmob.Query('DailyMenu');
     query.set('time', dayjs(time).format('YYYY-MM-DD'));
     query.set('type', type);
     query.set('menu', poiID);
-    query.save().then(res => {
+    global.doRequest(query, 'put').then(res => {
       global.showMessage("success", "Add Success");
-      global.hideLoading();
-    }).catch(err => {
-      global.showMessage("error", err.error);
-      global.hideLoading();
-    })
+    });
   }
 
   return (

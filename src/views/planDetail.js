@@ -35,15 +35,10 @@ export default function PlanDetail(props) {
   const global = useContext(GlobalContext);
 
   const getInfo = () => {
-    global.showLoading();
     const query = React.$bmob.Query("Plan");
-    query.get(props.match.params.id).then(res => {
+    global.doRequest(query, 'find', props.match.params.id).then(res => {
       setDetail(res);
       setInfo(res);
-      global.hideLoading();
-    }).catch(err => {
-      global.hideLoading();
-      global.showMessage("error", err.error);
     });
   }
 
@@ -70,7 +65,6 @@ export default function PlanDetail(props) {
 
   const saveDetail = () => {
     if (planName === '') return;
-    global.showLoading();
     const query = React.$bmob.Query("Plan");
     query.set('id', detail.objectId);
     query.set('title', planName);
@@ -78,15 +72,11 @@ export default function PlanDetail(props) {
     query.set('type', type);
     query.set('time', dayjs(time).format('YYYY-MM-DD'));
     query.set('detail', planDetail);
-    query.save().then(res => {
+    global.doRequest(query, 'put').then(res => {
       global.showMessage("success", "Add Success");
       setShowEdit(false);
-      global.hideLoading();
       getInfo();
-    }).catch(err => {
-      global.showMessage("error", err.error);
-      global.hideLoading();
-    })
+    });
   }
 
   const doFabAction = () => {
@@ -99,17 +89,12 @@ export default function PlanDetail(props) {
   }
 
   const doDelete = () => {
-    global.showLoading();
     const query = React.$bmob.Query("Plan");
-    query.destroy(detail.objectId).then(res => {
+    global.doRequest(query, 'delete', detail.objectId).then(res => {
       global.showMessage("success", "Delete Success");
       setShowEdit(false);
-      global.hideLoading();
       history.go(-1);
-    }).catch(err => {
-      global.hideLoading();
-      global.showMessage("error", err.error);
-    })
+    });
   }
 
   useEffect(getInfo, []);

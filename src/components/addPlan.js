@@ -48,20 +48,15 @@ export default function AddPlan(props) {
   const handleSubmit = () => {
     if (planName === '') return;
     handleClose();
-    global.showLoading();
     const query = React.$bmob.Query("Plan");
     query.set('title', planName);
     query.set('describe', planDes);
     query.set('type', type);
     query.set('time', dayjs(time).format('YYYY-MM-DD'));
-    query.save().then(res => {
+    global.doRequest(query, 'put').then(res => {
       global.showMessage("success", "Add Success");
       props.refreshPage();
-      global.hideLoading();
-    }).catch(err => {
-      global.showMessage("error", err.error);
-      global.hideLoading();
-    })
+    });
   }
 
   return (
