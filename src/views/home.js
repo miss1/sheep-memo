@@ -6,7 +6,7 @@ import Stack from '@mui/material/Stack';
 import CardActionArea from '@mui/material/CardActionArea';
 import Chip from '@mui/material/Chip';
 import CloseIcon from '@mui/icons-material/Close';
-import React, {useEffect, useRef, useState} from "react";
+import React, {useEffect, useState} from "react";
 import { useHistory } from "react-router-dom";
 import DeleteConfirm from "../components/deleteConfirm"
 import Loading from "../components/loading";
@@ -19,7 +19,6 @@ function Home() {
   const [breakfast, setBreakfast] = useState([]);
   const [lunch, setLunch] = useState([]);
   const [dinner, setDinner] = useState([]);
-  const [specialDay, setSpecialDay] = useState([]);
   const [special, setSpecial] = useState([]);
   const [msg, setMsg] = useState('message');
   const [msgType, setMsgType] = useState('success');
@@ -58,7 +57,6 @@ function Home() {
     specialQuery.order('time');
     specialQuery.equalTo("type", "==", 2);
     specialQuery.find().then(res => {
-      setSpecialDay(res);
       if (res && res.length > 0) {
         setSpecial(res[0]);
         timer = setInterval(() => {
@@ -73,7 +71,7 @@ function Home() {
         timer = null;
       }
     }
-  }, [setPlan, setBreakfast, setLunch, setDinner, setSpecialDay]);
+  }, [setPlan, setBreakfast, setLunch, setDinner]);
 
   const queryMenu = () => {
     const menuQuery = React.$bmob.Query("DailyMenu");

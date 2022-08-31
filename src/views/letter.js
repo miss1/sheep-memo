@@ -8,7 +8,6 @@ import img from '../assets/img/lineart.png'
 import React, { useEffect, useState } from "react";
 import Fab from '@mui/material/Fab';
 import CloseIcon from '@mui/icons-material/Close';
-import AddIcon from '@mui/icons-material/Add';
 import Loading from "../components/loading";
 
 function Letter() {
@@ -29,6 +28,16 @@ function Letter() {
   const showLetterContent = (content) => {
     setContent(content);
     setShowContent(true);
+  }
+
+  const ActionFeb = () => {
+    if (showContent) {
+      return (
+        <Fab onClick={doAction} color='warning' sx={{position: 'absolute', bottom: '5%', right: '10%'}}>
+          <CloseIcon/>
+        </Fab>
+      );
+    }
   }
 
   const doAction = () => {
@@ -75,12 +84,7 @@ function Letter() {
             ))}
         </div>
       </div>
-      <Fab onClick={doAction} color={showContent ? 'warning' : 'primary'} sx={{position: 'absolute', bottom: '5%', right: '10%'}}>
-        {showContent
-          ? <CloseIcon/>
-          : <AddIcon/>
-        }
-      </Fab>
+      <ActionFeb/>
       <Loading open={openLoading}/>
     </div>
   );
