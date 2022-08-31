@@ -28,6 +28,7 @@ export default function AddMenu(props) {
   const [type, setType] = useState('0');
   const [time, setTime] = useState(dayjs());
   const [objectId, setObjectId] = useState('');
+  const [name, setName] = useState('');
 
   useImperativeHandle(props.onRef, () => {
     return { openDialog: handleClickOpen };
@@ -41,8 +42,9 @@ export default function AddMenu(props) {
     setOpenMsg(false);
   };
 
-  const handleClickOpen = (id) => {
-    setObjectId(id);
+  const handleClickOpen = (obj) => {
+    setObjectId(obj.id);
+    setName(obj.name);
     setOpen(true);
     setTime(dayjs());
     setType('0');
@@ -85,7 +87,7 @@ export default function AddMenu(props) {
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>点菜</DialogTitle>
         <DialogContent>
-          <Typography variant="h6">白灼虾</Typography>
+          <Typography variant="h6">{name}</Typography>
           <FormControl sx={{mb: 1, mt: 1}}>
             <FormLabel id="time-radio-group-label">时间</FormLabel>
             <RadioGroup

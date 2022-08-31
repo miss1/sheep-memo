@@ -71,7 +71,9 @@ function Plan() {
           </ToggleButtonGroup>
           <div className='plan-content'>
             {list.map((item) => (
-              <CardActionArea sx={{mt: '10px'}} key={item.objectId} onClick={() => showPlanDetail(item.objectId)}>
+              <CardActionArea
+                className="animate__animated animate__fadeInUp"
+                sx={{mt: '10px'}} key={item.objectId} onClick={() => showPlanDetail(item.objectId)}>
                 <Alert severity={item.type}>
                   <AlertTitle>{item.title}</AlertTitle>
                   {item.describe} — <strong>{item.time || '/'}</strong>

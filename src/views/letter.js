@@ -55,7 +55,7 @@ function Letter() {
       <div className="content-page">
         <div className="page-scroll">
           {showContent
-            ? <div>
+            ? <div className="animate__animated animate__fadeIn animate__slow">
               <CardMedia
                 component="img"
                 height="100%"
@@ -67,7 +67,10 @@ function Letter() {
                 <Typography variant="subtitle1" sx={{textAlign: 'right'}}>{content.time}</Typography>
               </div>
             : list.map(item => (
-              <Card key={item.objectId} sx={{maxWidth: 600, margin: '10px auto'}}>
+              <Card
+                className="animate__animated animate__zoomIn"
+                key={item.objectId}
+                sx={{maxWidth: 600, margin: '10px auto'}}>
                 <CardActionArea onClick={() => showLetterContent(item)}>
                   <CardMedia
                     component="img"

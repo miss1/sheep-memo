@@ -33,7 +33,11 @@ function Login() {
   return (
     <div className="login-page">
       <div className="login-panel">
-        <div className="login-title"><span>Y</span><FavoriteIcon sx={{ color: pink[500], fontSize: 40 }}/><span>C</span></div>
+        <div className="login-title">
+          <span>Y</span>
+          <FavoriteIcon className="animate__animated animate__flip" sx={{ color: pink[500], fontSize: 40 }}/>
+          <span>C</span>
+        </div>
         <TextField
           variant="outlined"
           label="password"

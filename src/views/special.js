@@ -57,7 +57,7 @@ function Special() {
       <div className="content-page">
         {showTimeLine
           ? <div className="page-scroll special-timeline">
-            <Timeline position="alternate">
+            <Timeline position="alternate" className="animate__animated animate__fadeIn">
               {timeline.map((item) => (
                 <TimelineItem key={item.objectId}>
                   <TimelineSeparator>
@@ -72,7 +72,10 @@ function Special() {
           </div>
           : <div className="page-scroll special-page">
             {list.map((item) => (
-              <Card key={item.objectId} sx={{width: {xs: '100%', md: '49%'}, margin: '5px 0'}}>
+              <Card
+                className="animate__animated animate__fadeInUp"
+                key={item.objectId}
+                sx={{width: {xs: '100%', md: '49%'}, margin: '5px 0'}}>
                 <CardContent sx={{m: 0, p: 0}}>
                   <div className={item.type === 1 ? 'special-head-down' : 'special-head-up'}>
                     <p>{item.name}</p>
@@ -87,7 +90,9 @@ function Special() {
           </div>
         }
       </div>
-      <Fab onClick={doAction} color={showTimeLine ? 'warning' : 'primary'}
+      <Fab
+        className={`animate__animated animate__bounceIn`}
+        onClick={doAction} color={showTimeLine ? 'warning' : 'primary'}
            sx={{position: 'absolute', bottom: '5%', right: '10%'}}>
         <SwapHorizIcon/>
       </Fab>

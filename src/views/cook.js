@@ -58,9 +58,9 @@ function Cook() {
     setShowDetail(true);
   }
 
-  const addToMenuList = (event, id) => {
+  const addToMenuList = (event, id, name) => {
     event.stopPropagation();
-    addMenuRef.current.openDialog(id);
+    addMenuRef.current.openDialog({id: id, name: name});
   }
 
   return (
@@ -81,7 +81,7 @@ function Cook() {
               <p style={{whiteSpace: "pre-line", margin: "5px 0 20px"}}>{detail.ingredients}</p>
               <Typography variant="h6">制作方法</Typography>
               <p style={{whiteSpace: "pre-line", margin: "5px 0 20px"}}>{detail.describe}</p>
-              <Button variant="contained" onClick={(event) => addToMenuList(event, detail.objectId)}>下单</Button>
+              <Button variant="contained" onClick={(event) => addToMenuList(event, detail.objectId, detail.name)}>下单</Button>
             </div>
             : <ImageList>
               {list.map((item) => (
@@ -98,7 +98,7 @@ function Cook() {
                       <IconButton
                         sx={{color: 'rgba(255, 255, 255, 0.54)'}}
                         aria-label={`info about ${item.name}`}
-                        onClick={(event) => addToMenuList(event, item.objectId)}>
+                        onClick={(event) => addToMenuList(event, item.objectId, item.name)}>
                         <AddCircleIcon/>
                       </IconButton>
                     }

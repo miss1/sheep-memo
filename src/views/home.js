@@ -124,20 +124,25 @@ function Home() {
       <Header/>
       <div className="content-page">
         <div className="page-scroll">
-          <div className="home-time" style={{display: "flex", alignItems: "center", marginBottom: "20px"}}>
+          <div
+            className="home-time animate__animated animate__fadeInDown"
+            style={{display: "flex", alignItems: "center", marginBottom: "20px"}}>
             <AccessTimeFilledIcon sx={{color: '#F19595'}}/>
             <Typography variant="h5" color="#F19595">2022-08-30</Typography>
           </div>
           <Box>
             <Stack spacing={2}>
               <CardActionArea
+                className="animate__animated animate__fadeInLeft"
                 sx={{backgroundColor: "rgb(253, 237, 237)", borderRadius: "4px", padding: "15px"}}
                 onClick={() => handleToPlanDetail(plan.objectId)}>
                 <Typography variant="subtitle1" color="text.secondary">最近的计划</Typography>
                 <Typography variant="subtitle2" sx={{mt: 1}}>{plan.title}</Typography>
                 <Typography variant="subtitle2">{plan.time}</Typography>
               </CardActionArea>
-              <div style={{backgroundColor: "rgb(229, 246, 253)", borderRadius: "4px", padding: "15px"}}>
+              <div
+                className="animate__animated animate__fadeInRight"
+                style={{backgroundColor: "rgb(229, 246, 253)", borderRadius: "4px", padding: "15px"}}>
                 <Typography variant="subtitle1" color="text.secondary">今日菜单</Typography>
                 <Typography variant="subtitle2" sx={{mt: 2}}>早餐</Typography>
                 <div style={{display: "flex", flexWrap: "wrap"}}>
@@ -178,7 +183,10 @@ function Home() {
         </div>
       </div>
       <div style={{position: "absolute", bottom: "20px", display: "flex", justifyContent: "center", width: "100%"}}>
-        <Chip label={special.name + " (" + special.time + ")"} sx={{margin: "5px", backgroundColor: "rgb(237, 247, 237)"}}/>
+        <Chip
+          className="animate__animated animate__flipInX"
+          label={special.name + " (" + special.time + ")"}
+          sx={{margin: "5px", backgroundColor: "rgb(237, 247, 237)"}}/>
       </div>
       <DeleteConfirm onRef={confirmDialogRef} doDelete={doDeleteFood}/>
       <Message vertical="top" horizontal="center" open={openMsg} type={msgType} text={msg} close={closeMsg}/>
