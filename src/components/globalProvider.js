@@ -72,7 +72,7 @@ function GlobalProvider({children}) {
     messageRef.current = err.error;
     setOpenMsg(true);
     if (err.code === 122) {
-      window.location.replace('/');
+      window.location.replace('/forher/index.html');
     }
   };
 
