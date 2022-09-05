@@ -102,7 +102,7 @@ function Home() {
             className="home-time animate__animated animate__fadeInDown"
             style={{display: "flex", alignItems: "center", marginBottom: "20px"}}>
             <AccessTimeFilledIcon sx={{color: '#F19595'}}/>
-            <Typography variant="h5" color="#F19595">2022-08-30</Typography>
+            <Typography variant="h5" color="#F19595">{dayjs().format('YYYY-MM-DD')}</Typography>
           </div>
           <Box>
             <Stack spacing={2}>
