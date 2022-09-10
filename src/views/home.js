@@ -13,7 +13,7 @@ import {GlobalContext} from "../components/globalProvider"
 import dayjs from "dayjs";
 
 function Home() {
-  const [plan, setPlan] = useState({});
+  const [plans, setPlan] = useState([]);
   const [breakfast, setBreakfast] = useState([]);
   const [lunch, setLunch] = useState([]);
   const [dinner, setDinner] = useState([]);
@@ -37,13 +37,9 @@ function Home() {
     const planQuery = React.$bmob.Query("Plan");
     planQuery.equalTo("type", "==", "error");
     planQuery.order('-time');
-    planQuery.limit(1);
+    planQuery.limit(3);
     global.doRequest(planQuery, 'get').then(res => {
-      if (res.length > 0) {
-        setPlan(res[0]);
-      } else {
-        setPlan({ objectId: '', title: '-', time: '-'});
-      }
+      setPlan(res);
     });
   };
 
@@ -106,14 +102,18 @@ function Home() {
           </div>
           <Box>
             <Stack spacing={2}>
-              <CardActionArea
-                className="animate__animated animate__fadeInLeft"
-                sx={{backgroundColor: "rgb(253, 237, 237)", borderRadius: "4px", padding: "15px"}}
-                onClick={() => handleToPlanDetail(plan.objectId)}>
-                <Typography variant="subtitle1" color="text.secondary">最近的计划</Typography>
-                <Typography variant="subtitle2" sx={{mt: 1}}>{plan.title}</Typography>
-                <Typography variant="subtitle2">{plan.time}</Typography>
-              </CardActionArea>
+              <Typography variant="subtitle1" color="text.secondary">最近的计划</Typography>
+              {plans.map((plan) => (
+                <CardActionArea
+                  key={plan.objectId}
+                  className="animate__animated animate__fadeInLeft"
+                  sx={{backgroundColor: "rgb(253, 237, 237)", borderRadius: "4px", padding: "15px"}}
+                  onClick={() => handleToPlanDetail(plan.objectId)}>
+                  <Typography variant="subtitle2" sx={{mt: 1}}>{plan.title}</Typography>
+                  <Typography variant="subtitle2">{plan.describe}</Typography>
+                  <Typography variant="subtitle2">{plan.time}</Typography>
+                </CardActionArea>
+              ))}
               <div
                 className="animate__animated animate__fadeInRight"
                 style={{backgroundColor: "rgb(229, 246, 253)", borderRadius: "4px", padding: "15px"}}>
