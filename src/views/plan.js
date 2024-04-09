@@ -11,6 +11,7 @@ import Fab from "@mui/material/Fab";
 import AddPlan from "../components/addPlan";
 import { useHistory } from "react-router-dom";
 import {GlobalContext} from "../components/globalProvider"
+import dayjs from "dayjs";
 
 function Plan() {
   const [alignment, setAlignment] = useState('');
@@ -19,18 +20,15 @@ function Plan() {
   let addPlanRef = React.createRef();
   const global = useContext(GlobalContext);
 
-  const getList = (type) => {
-    const query = React.$bmob.Query("Plan");
-    query.order('-time');
-    if (type) query.equalTo("type", "==", type);
-    global.doRequest(query, 'get').then(res => {
-      setList(res);
-    });
+  const getList = async (newAlignment) => {
+    const type = newAlignment === undefined ? alignment : newAlignment;
+    const res = await global.doRequest(`https://querytrips-drmnut5neq-uc.a.run.app?type=${type}`);
+    setList(res);
   }
 
   const handleChange = (event, newAlignment) => {
-    setAlignment(newAlignment);
     getList(newAlignment);
+    setAlignment(newAlignment);
   };
 
   const showPlanDetail = (id) => {
@@ -41,7 +39,9 @@ function Plan() {
     addPlanRef.current.openDialog();
   }
 
-  useEffect(getList, []);
+  useEffect(() => {
+    getList()
+  }, []);
 
   return (
     <div className="page">
@@ -55,18 +55,18 @@ function Plan() {
             onChange={handleChange}
             sx={{mt: '5px'}}
             aria-label="Platform">
-            <ToggleButton size="small" value="success">已完成</ToggleButton>
-            <ToggleButton size="small" value="error">计划中</ToggleButton>
-            <ToggleButton size="small" value="info">未来</ToggleButton>
+            <ToggleButton size="small" value="">all</ToggleButton>
+            <ToggleButton size="small" value="success">completed</ToggleButton>
+            <ToggleButton size="small" value="error">planned</ToggleButton>
           </ToggleButtonGroup>
           <div className='plan-content'>
             {list.map((item) => (
               <CardActionArea
                 className="animate__animated animate__fadeInUp"
-                sx={{mt: '10px'}} key={item.objectId} onClick={() => showPlanDetail(item.objectId)}>
+                sx={{mt: '10px'}} key={item.id} onClick={() => showPlanDetail(item.id)}>
                 <Alert severity={item.type}>
                   <AlertTitle>{item.title}</AlertTitle>
-                  {item.describe} — <strong>{item.time || '/'}</strong>
+                  {item.describe} -- <strong>{dayjs(item.time).format('MM/DD/YYYY')}</strong>
                 </Alert>
               </CardActionArea>
             ))}

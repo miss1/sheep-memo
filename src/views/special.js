@@ -25,24 +25,27 @@ function Special() {
   dayjs.extend(duration)
 
   const getLists = () => {
-    const query = React.$bmob.Query("Special");
-    query.order('time');
-    global.doRequest(query, 'get').then(res => {
-      let data = res.map(val => {
-        if (val.type === 1) {
-          val.duration = '';
-          val.days = dayjs(val.time).diff(dayjs(), 'day');
-        } else {
-          let _data = dayjs.duration(dayjs().diff(dayjs(val.time)));
-          val.duration = _data.years() + ' Years ' + _data.months() + ' Month ' + _data.days() + ' Day';
-          val.days = dayjs().diff(dayjs(val.time), 'day');
-        }
-        return val;
-      });
-      let timeList = data.filter(val => val.type === 2);
-      setList(data);
-      setTimeline(timeList);
-    });
+    // const query = React.$bmob.Query("Special");
+    // query.order('time');
+    // global.doRequest(query, 'get').then(res => {
+    //   let data = res.map(val => {
+    //     if (val.type === 1) {
+    //       val.duration = '';
+    //       val.days = dayjs(val.time).diff(dayjs(), 'day');
+    //     } else {
+    //       let d = dayjs().diff(dayjs(val.time), 'day');
+    //       let t = val.time
+    //       if (d < 0)
+    //       let _data = dayjs.duration(dayjs().diff(dayjs(val.time)));
+    //       val.duration = _data.years() + ' Years ' + _data.months() + ' Month ' + _data.days() + ' Day';
+    //       val.days = dayjs().diff(dayjs(val.time), 'day');
+    //     }
+    //     return val;
+    //   });
+    //   let timeList = data.filter(val => val.type === 2);
+    //   setList(data);
+    //   setTimeline(timeList);
+    // });
   }
 
   const doAction = () => {

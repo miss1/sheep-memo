@@ -17,11 +17,11 @@ function Letter() {
   const global = useContext(GlobalContext);
 
   const queryLetter = () => {
-    const query = React.$bmob.Query("Letter");
-    query.order('-createdAt');
-    global.doRequest(query, 'get').then(res => {
-      setList(res);
-    });
+    // const query = React.$bmob.Query("Letter");
+    // query.order('-createdAt');
+    // global.doRequest(query, 'get').then(res => {
+    //   setList(res);
+    // });
   }
 
   const showLetterContent = (content) => {

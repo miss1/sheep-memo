@@ -13,14 +13,7 @@ function Login() {
   const global = useContext(GlobalContext);
 
   const doLogin = () => {
-    global.showLoading();
-    React.$bmob.User.login('ccc',password).then(res => {
-      global.hideLoading();
-      history.replace({pathname: '/home'});
-    }).catch(err => {
-      global.hideLoading();
-      global.showMessage("error", err.error);
-    });
+    history.replace({pathname: '/home'});
   }
 
   return (

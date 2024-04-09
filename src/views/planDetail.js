@@ -34,12 +34,11 @@ export default function PlanDetail(props) {
   let history = useHistory();
   const global = useContext(GlobalContext);
 
-  const getInfo = () => {
-    const query = React.$bmob.Query("Plan");
-    global.doRequest(query, 'find', props.match.params.id).then(res => {
-      setDetail(res);
-      setInfo(res);
-    });
+  const getInfo = async () => {
+    const res = await global.doRequest(`https://querytrip-drmnut5neq-uc.a.run.app?id=${props.match.params.id}`);
+    console.log(res)
+    setDetail(res);
+    setInfo(res);
   }
 
   const setInfo = (data) => {
@@ -63,20 +62,19 @@ export default function PlanDetail(props) {
     }
   }
 
-  const saveDetail = () => {
+  const saveDetail = async () => {
     if (planName === '') return;
-    const query = React.$bmob.Query("Plan");
-    query.set('id', detail.objectId);
-    query.set('title', planName);
-    query.set('describe', planDes);
-    query.set('type', type);
-    query.set('time', dayjs(time).format('YYYY-MM-DD'));
-    query.set('detail', planDetail);
-    global.doRequest(query, 'put').then(res => {
-      global.showMessage("success", "Add Success");
-      setShowEdit(false);
-      getInfo();
-    });
+    const param = {
+      describe: planDes,
+      detail: planDetail,
+      time: dayjs(time).valueOf(),
+      title: planName,
+      type: type
+    }
+    const res = await global.doRequest(`https://updatetrip-drmnut5neq-uc.a.run.app?id=${detail.id}`, 'POST', param);
+    global.showMessage("success", res);
+    setShowEdit(false);
+    getInfo();
   }
 
   const doFabAction = () => {
@@ -85,19 +83,19 @@ export default function PlanDetail(props) {
   }
 
   const deletePlan = () => {
-    confirmDialogRef.current.openDialog("确定删除这条数据吗？");
+    confirmDialogRef.current.openDialog("Are you sure you want to delete this data?");
   }
 
-  const doDelete = () => {
-    const query = React.$bmob.Query("Plan");
-    global.doRequest(query, 'delete', detail.objectId).then(res => {
-      global.showMessage("success", "Delete Success");
-      setShowEdit(false);
-      history.go(-1);
-    });
+  const doDelete = async () => {
+    const res = await global.doRequest(`https://deletetrip-drmnut5neq-uc.a.run.app?id=${detail.id}`, 'DELETE');
+    global.showMessage("success", res);
+    setShowEdit(false);
+    history.go(-1);
   }
 
-  useEffect(getInfo, []);
+  useEffect(() => {
+    getInfo();
+  }, []);
 
   return (
     <div className="page">
@@ -123,9 +121,8 @@ export default function PlanDetail(props) {
                   name="row-radio-buttons-group"
                   value={type}
                   onChange={(e) => setType(e.target.value)}>
-                  <FormControlLabel value="success" control={<Radio size="small" />} label="已完成" />
-                  <FormControlLabel value="error" control={<Radio size="small" />} label="计划中" />
-                  <FormControlLabel value="info" control={<Radio size="small" />} label="未来" />
+                  <FormControlLabel value="success" control={<Radio size="small" />} label="completed" />
+                  <FormControlLabel value="error" control={<Radio size="small" />} label="planned" />
                 </RadioGroup>
               </FormControl>
               <TextField
@@ -170,7 +167,7 @@ export default function PlanDetail(props) {
               </div>
               <Typography variant="subtitle1">{detail.describe}</Typography>
               <Typography variant="subtitle1" sx={{mt: 2}}>时间</Typography>
-              <Typography variant="subtitle2">{detail.time}</Typography>
+              <Typography variant="subtitle2">{dayjs(detail.time).format('MM/DD/YYYY')}</Typography>
               <Typography variant="subtitle1" sx={{mt: 2}}>计划</Typography>
               <Typography variant="subtitle2" sx={{whiteSpace: "pre-line"}}>{detail.detail}</Typography>
             </div>

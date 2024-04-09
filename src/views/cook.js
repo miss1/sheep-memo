@@ -24,10 +24,10 @@ function Cook() {
   let addMenuRef = React.createRef();
 
   const queryList = () => {
-    const query = React.$bmob.Query("Cookbook");
-    global.doRequest(query, 'get').then(res => {
-      setList(res);
-    });
+    // const query = React.$bmob.Query("Cookbook");
+    // global.doRequest(query, 'get').then(res => {
+    //   setList(res);
+    // });
   }
 
   const doFabAction = () => {

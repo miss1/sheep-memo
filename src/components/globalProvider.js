@@ -18,61 +18,34 @@ function GlobalProvider({children}) {
   const typeRef = useRef();
   const messageRef = useRef();
 
-  const doFind = (query) => {
-    return new Promise((resolve, reject) => {
-      query.find().then(res => {
-        setOpenLoading(false);
-        resolve(res);
-      }).catch(err => {
-        doQueryError(err);
-        reject();
-      })
-    })
-  };
+  const sendRequest = async (url, method, param) => {
+    try {
+      const response = await fetch(url, {
+        method: method || 'GET',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: param ? JSON.stringify(param) : null,
+      });
 
-  const doGet = (query, id) => {
-    return new Promise((resolve, reject) => {
-      query.get(id).then(res => {
-        setOpenLoading(false);
-        resolve(res);
-      }).catch(err => {
-        doQueryError(err);
-        reject();
-      })
-    })
-  };
+      setOpenLoading(false);
 
-  const doSave = (query) => {
-    return new Promise((resolve, reject) => {
-      query.save().then(res => {
-        setOpenLoading(false);
-        resolve(res);
-      }).catch(err => {
-        doQueryError(err);
-        reject();
-      })
-    })
-  };
-
-  const doDelete = (query, id) => {
-    return new Promise((resolve, reject) => {
-      query.destroy(id).then(res => {
-        setOpenLoading(false);
-        resolve(res);
-      }).catch(err => {
-        doQueryError(err);
-        reject();
-      })
-    })
-  };
-
-  const doQueryError = (err) => {
-    setOpenLoading(false);
-    typeRef.current = "error";
-    messageRef.current = err.error;
-    setOpenMsg(true);
-    if (err.code === 122) {
-      window.location.replace('/forher/index.html');
+      const contentType = response.headers.get('content-type');
+      if (contentType && contentType.includes('application/json')) {
+        return response.json();
+      } else {
+        return response.text();
+      }
+    } catch (error) {
+      console.log(error)
+      setOpenLoading(false);
+      typeRef.current = 'error';
+      messageRef.current = error.error;
+      setOpenMsg(true);
+      // if (err.code === 122) {
+      //   window.location.replace('/forher/index.html');
+      // }
     }
   };
 
@@ -93,12 +66,9 @@ function GlobalProvider({children}) {
         hideLoading: () => {
           setOpenLoading(false);
         },
-        doRequest: (query, type, id) => {
+        doRequest: (url, method, param) => {
           setOpenLoading(true);
-          if (type === 'get') return doFind(query);
-          if (type === 'find') return doGet(query, id);
-          if (type === 'put') return doSave(query);
-          if (type === 'delete') return doDelete(query, id);
+          return sendRequest(url, method, param);
         }
       }}>
       {children}

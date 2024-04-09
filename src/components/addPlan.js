@@ -45,24 +45,24 @@ export default function AddPlan(props) {
     setTime(newValue);
   }
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (planName === '') return;
     handleClose();
-    const query = React.$bmob.Query("Plan");
-    query.set('title', planName);
-    query.set('describe', planDes);
-    query.set('type', type);
-    query.set('time', dayjs(time).format('YYYY-MM-DD'));
-    global.doRequest(query, 'put').then(res => {
-      global.showMessage("success", "Add Success");
-      props.refreshPage();
-    });
+    const param = {
+      describe: planDes,
+      time: dayjs(time).valueOf(),
+      title: planName,
+      type: type
+    }
+    const res = await global.doRequest(`https://createtrip-drmnut5neq-uc.a.run.app`, 'PUT', param);
+    global.showMessage("success", res);
+    props.refreshPage();
   }
 
   return (
     <div>
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>添加新计划</DialogTitle>
+        <DialogTitle>Add a new Plan</DialogTitle>
         <DialogContent>
           <FormControl>
             <FormLabel id="demo-row-radio-buttons-group-label">Plan type</FormLabel>
@@ -72,9 +72,8 @@ export default function AddPlan(props) {
               name="row-radio-buttons-group"
               value={type}
               onChange={handleTypeChange}>
-              <FormControlLabel value="success" control={<Radio size="small" />} label="已完成" />
-              <FormControlLabel value="error" control={<Radio size="small" />} label="计划中" />
-              <FormControlLabel value="info" control={<Radio size="small" />} label="未来" />
+              <FormControlLabel value="success" control={<Radio size="small" />} label="completed" />
+              <FormControlLabel value="error" control={<Radio size="small" />} label="planned" />
             </RadioGroup>
           </FormControl>
           <TextField
@@ -105,8 +104,8 @@ export default function AddPlan(props) {
           </LocalizationProvider>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>取消</Button>
-          <Button onClick={handleSubmit}>添加</Button>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleSubmit}>Add</Button>
         </DialogActions>
       </Dialog>
     </div>
