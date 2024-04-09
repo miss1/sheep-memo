@@ -1,26 +1,26 @@
 {
   "files": {
-    "main.css": "/forher/static/css/main.5f881c5c.chunk.css",
-    "main.js": "/forher/static/js/main.d2b9d8fe.chunk.js",
-    "main.js.map": "/forher/static/js/main.d2b9d8fe.chunk.js.map",
-    "runtime-main.js": "/forher/static/js/runtime-main.5eabd8eb.js",
-    "runtime-main.js.map": "/forher/static/js/runtime-main.5eabd8eb.js.map",
-    "static/css/2.a1596f27.chunk.css": "/forher/static/css/2.a1596f27.chunk.css",
-    "static/js/2.81c86637.chunk.js": "/forher/static/js/2.81c86637.chunk.js",
-    "static/js/2.81c86637.chunk.js.map": "/forher/static/js/2.81c86637.chunk.js.map",
-    "index.html": "/forher/index.html",
-    "static/css/2.a1596f27.chunk.css.map": "/forher/static/css/2.a1596f27.chunk.css.map",
-    "static/css/main.5f881c5c.chunk.css.map": "/forher/static/css/main.5f881c5c.chunk.css.map",
-    "static/js/2.81c86637.chunk.js.LICENSE.txt": "/forher/static/js/2.81c86637.chunk.js.LICENSE.txt",
-    "static/media/index.css": "/forher/static/media/bak.6586dec7.svg",
-    "static/media/cook-default.215755eb.jpg": "/forher/static/media/cook-default.215755eb.jpg",
-    "static/media/lineart.c315d534.png": "/forher/static/media/lineart.c315d534.png"
+    "main.css": "/sheep-memo/static/css/main.4be9ed90.chunk.css",
+    "main.js": "/sheep-memo/static/js/main.31147f71.chunk.js",
+    "main.js.map": "/sheep-memo/static/js/main.31147f71.chunk.js.map",
+    "runtime-main.js": "/sheep-memo/static/js/runtime-main.7260881c.js",
+    "runtime-main.js.map": "/sheep-memo/static/js/runtime-main.7260881c.js.map",
+    "static/css/2.a1596f27.chunk.css": "/sheep-memo/static/css/2.a1596f27.chunk.css",
+    "static/js/2.eebf034b.chunk.js": "/sheep-memo/static/js/2.eebf034b.chunk.js",
+    "static/js/2.eebf034b.chunk.js.map": "/sheep-memo/static/js/2.eebf034b.chunk.js.map",
+    "index.html": "/sheep-memo/index.html",
+    "static/css/2.a1596f27.chunk.css.map": "/sheep-memo/static/css/2.a1596f27.chunk.css.map",
+    "static/css/main.4be9ed90.chunk.css.map": "/sheep-memo/static/css/main.4be9ed90.chunk.css.map",
+    "static/js/2.eebf034b.chunk.js.LICENSE.txt": "/sheep-memo/static/js/2.eebf034b.chunk.js.LICENSE.txt",
+    "static/media/index.css": "/sheep-memo/static/media/bak.6586dec7.svg",
+    "static/media/cook-default.215755eb.jpg": "/sheep-memo/static/media/cook-default.215755eb.jpg",
+    "static/media/lineart.c315d534.png": "/sheep-memo/static/media/lineart.c315d534.png"
   },
   "entrypoints": [
-    "static/js/runtime-main.5eabd8eb.js",
+    "static/js/runtime-main.7260881c.js",
     "static/css/2.a1596f27.chunk.css",
-    "static/js/2.81c86637.chunk.js",
-    "static/css/main.5f881c5c.chunk.css",
-    "static/js/main.d2b9d8fe.chunk.js"
+    "static/js/2.eebf034b.chunk.js",
+    "static/css/main.4be9ed90.chunk.css",
+    "static/js/main.31147f71.chunk.js"
   ]
 }
