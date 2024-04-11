@@ -7,6 +7,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import React, {useState, useImperativeHandle, useContext } from "react";
 import {GlobalContext} from "./globalProvider";
+import dayjs from "dayjs";
 
 export default function AddCookDialog(props) {
   const [open, setOpen] = useState(false);
@@ -25,15 +26,15 @@ export default function AddCookDialog(props) {
     setOpen(false);
   };
 
-  const handleSubmit = () => {
-    // handleClose();
-    // const query = React.$bmob.Query("Cookbook");
-    // query.set('name',cookName);
-    // query.set('frequency',0);
-    // global.doRequest(query, 'put').then(res => {
-    //   global.showMessage("success", "Add Success");
-    //   props.refreshPage();
-    // });
+  const handleSubmit = async () => {
+    handleClose();
+    const param = {
+      name: cookName,
+      frequency: 0,
+    }
+    const res = await global.doRequest(`https://createrecipe-drmnut5neq-uc.a.run.app`, 'PUT', param);
+    global.showMessage("success", res);
+    props.refreshPage();
   };
 
   return (

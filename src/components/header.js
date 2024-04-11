@@ -15,8 +15,7 @@ const pages = [
   {value: '/home', label: 'HOME'},
   {value: '/special', label: 'SPECIAL DAY'},
   {value: '/plan', label: 'PLAN'},
-  {value: '/letter', label: 'LETTER'},
-  {value: '/cook', label: 'COOKBOOK'}
+  {value: '/recipes', label: 'RECIPES'}
 ];
 
 function Header() {

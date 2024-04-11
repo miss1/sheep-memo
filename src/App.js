@@ -4,7 +4,6 @@ import Home from './views/home';
 import Special from './views/special';
 import Plan from './views/plan';
 import PlanDetail from './views/planDetail';
-import Letter from './views/letter';
 import Cook from './views/cook';
 
 function App() {
@@ -15,8 +14,7 @@ function App() {
         <Route path="/special" component={Special} />
         <Route path="/plan" component={Plan} />
         <Route path="/plan-detail/:id" component={PlanDetail} />
-        <Route path="/letter" component={Letter} />
-        <Route path="/cook" component={Cook} />
+        <Route path="/recipes" component={Cook} />
         <Route path="/" component={Login} />
       </Switch>
     </HashRouter>

@@ -23,11 +23,9 @@ function Cook() {
   let addDialogRef = React.createRef();
   let addMenuRef = React.createRef();
 
-  const queryList = () => {
-    // const query = React.$bmob.Query("Cookbook");
-    // global.doRequest(query, 'get').then(res => {
-    //   setList(res);
-    // });
+  const queryList = async () => {
+    const res = await global.doRequest(`https://queryrecipes-drmnut5neq-uc.a.run.app`);
+    setList(res);
   }
 
   const doFabAction = () => {
@@ -48,7 +46,9 @@ function Cook() {
     addMenuRef.current.openDialog({id: id, name: name});
   }
 
-  useEffect(queryList, []);
+  useEffect(() => {
+    queryList();
+  }, []);
 
   return (
     <div className="page">
@@ -72,7 +72,7 @@ function Cook() {
             </div>
             : <ImageList>
               {list.map((item) => (
-                <ImageListItem key={item.objectId} onClick={() => showContent(item)}>
+                <ImageListItem key={item.id} onClick={() => showContent(item)}>
                   <img
                     src={item.img || defaultImg}
                     alt={item.name}
